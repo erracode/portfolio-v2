@@ -3,6 +3,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 import { SpriteFlipbook } from "./SpriteFlipbook"
 import { IDLE_LEFT, IDLE_RIGHT, WALK_LEFT, WALK_RIGHT, type SpriteAnimation } from "./SpriteAnimation"
 import { JumpAnimation } from "./JumpAnimation"
+import { AxeAnimation } from "./AxeAnimation"
 
 export class PlayerController {
   // Constants
@@ -13,10 +14,12 @@ export class PlayerController {
   private GRAVITY = 25
   private JUMP_DURATION = 0.5 // Should match jump animation duration
   private GROUND_Y = 1
+  private AXE_THROW_COOLDOWN = 0.5 // Cooldown between throws in seconds
 
   // Components
   private spriteFlipbook: SpriteFlipbook
   private jumpAnimation: JumpAnimation
+  private axeAnimation: AxeAnimation
   private camera: THREE.Camera
   private orbitControls: OrbitControls
   private sprite!: THREE.Sprite
@@ -36,6 +39,9 @@ export class PlayerController {
   private velocity = new THREE.Vector3()
   private jumpForce = 0.2
   private isFlipped = false
+  private lastThrowTime = 0
+  private raycaster = new THREE.Raycaster()
+  private mouse = new THREE.Vector2()
 
   // Movement vectors
   private walkDirection = new THREE.Vector3()
@@ -53,7 +59,11 @@ export class PlayerController {
 
     // Initialize jump animation
     this.jumpAnimation = new JumpAnimation(scene)
-    this.jumpAnimation.setScale(2, 2, 1) // Slightly smaller scale
+    this.jumpAnimation.setScale(2, 2, 1)
+
+    // Initialize axe animation
+    this.axeAnimation = new AxeAnimation(scene)
+    this.axeAnimation.setScale(1.8, 1.8, 1) // Slightly smaller axe
 
     // Set the sprite reference
     this.sprite = this.spriteFlipbook.getSprite()
@@ -133,6 +143,55 @@ export class PlayerController {
         )
       }
     }, 100)
+
+    // Set up mouse controls
+    this.setupControls()
+  }
+
+  private setupControls() {
+    // Add mouse click handler
+    document.addEventListener('contextmenu', (event) => {
+      event.preventDefault() // Prevent default right-click menu
+      this.handleAxeThrow(event)
+    }, false)
+
+    // Add mouse move handler
+    document.addEventListener('mousemove', (event) => {
+      // Update normalized mouse coordinates (-1 to +1)
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+    }, false)
+  }
+
+  private handleAxeThrow(event: MouseEvent) {
+    const currentTime = performance.now() / 1000 // Convert to seconds
+    
+    // Check cooldown
+    if (currentTime - this.lastThrowTime < this.AXE_THROW_COOLDOWN) {
+      return
+    }
+    
+    // Update raycaster with current mouse position and camera
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+    
+    // Create a plane at the player's height to intersect with
+    const throwPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -this.GROUND_Y)
+    const targetPoint = new THREE.Vector3()
+    
+    // Find the intersection point of the ray with the plane
+    this.raycaster.ray.intersectPlane(throwPlane, targetPoint)
+    
+    if (targetPoint) {
+      // Calculate throw direction
+      const playerPos = this.spriteFlipbook.getPosition()
+      const throwDirection = new THREE.Vector3()
+        .subVectors(targetPoint, playerPos)
+        .normalize()
+      
+      // Start the throw
+      this.axeAnimation.throw(playerPos, throwDirection)
+      this.lastThrowTime = currentTime
+    }
   }
 
   public update(deltaTime: number) {
@@ -151,6 +210,9 @@ export class PlayerController {
     this.spriteFlipbook.update(deltaTime)
     if (this.isJumping) {
       this.updateJumpAnimation()
+    }
+    if (this.axeAnimation.isActive()) {
+      this.axeAnimation.update(deltaTime)
     }
     
     // Update sprite position

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Game from './components/Game'
 import PortfolioOverlay from './components/PortfolioOverlay'
 import { ExperienceOverlay } from './components/ExperienceOverlay'
@@ -9,6 +9,12 @@ import MessageDialog from './components/ui/MessageDialog'
 
 function App() {
   const [activeId, setActiveId] = useState<string | null>(null)
+  // Simple dialog system queue
+  const dialogQueue = [
+    'Welcome to my portfolio website!',
+    'Feel free to explore by clicking on objects.'
+  ]
+  const [dialogIndex, setDialogIndex] = useState(0)
   console.log('portfolioItems', portfolioItems)
   console.log('activeId', activeId)
   return (
@@ -16,7 +22,13 @@ function App() {
       {/* 3D world */}
       <Game onProjectActivate={setActiveId} />
 
-      <MessageDialog message="Hello, adventurer!" />
+      {/* Show welcome dialogs, click to advance */}
+      {dialogIndex < dialogQueue.length && (
+        <MessageDialog
+          message={dialogQueue[dialogIndex] ?? ''}
+          onNext={() => setDialogIndex((i) => i + 1)}
+        />
+      )}
       {/* Panel Overlay on left side */}
       {activeId && (
         <div className={appStyles.panel}>

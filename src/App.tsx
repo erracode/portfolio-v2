@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import Game from './components/Game'
 import PortfolioOverlay from './components/PortfolioOverlay'
 import { ExperienceOverlay } from './components/ExperienceOverlay'
@@ -9,20 +9,24 @@ import MessageDialog from './components/ui/MessageDialog'
 
 function App() {
   const [activeId, setActiveId] = useState<string | null>(null)
-  // Simple dialog system queue
-  const dialogQueue = [
+  // Manage dialog queue in state
+  const [dialogQueue, setDialogQueue] = useState<string[]>([
     'Welcome to my portfolio website!',
     'Feel free to explore by clicking on objects.'
-  ]
+  ])
   const [dialogIndex, setDialogIndex] = useState(0)
+  // Handler to enqueue new dialog messages (stable identity)
+  const handleDialogTrigger = useCallback((msg: string) => {
+    setDialogQueue((prev) => [...prev, msg])
+  }, [])
   console.log('portfolioItems', portfolioItems)
   console.log('activeId', activeId)
   return (
     <div className={appStyles.container}>
       {/* 3D world */}
-      <Game onProjectActivate={setActiveId} />
+      <Game onProjectActivate={setActiveId} onDialog={handleDialogTrigger} />
 
-      {/* Show welcome dialogs, click to advance */}
+      {/* Show welcome/dialog messages, click to advance */}
       {dialogIndex < dialogQueue.length && (
         <MessageDialog
           message={dialogQueue[dialogIndex] ?? ''}

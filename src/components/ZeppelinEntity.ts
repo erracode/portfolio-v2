@@ -4,9 +4,14 @@ export class ZeppelinEntity {
   private sprite: THREE.Sprite
   private material: THREE.SpriteMaterial
   private texture: THREE.Texture
+  private camera: THREE.Camera
   private currentFrame = 0
   private frameTime = 0
   private isPlaying = false
+  private raycaster: THREE.Raycaster
+  private contactCallback?: () => void
+  private hasTriggeredContact = false
+  private handleClickBound!: (event: MouseEvent) => void
   
   // Sprite sheet configuration
   private totalFrames = 5 // 5 frames in the sprite sheet
@@ -23,7 +28,7 @@ export class ZeppelinEntity {
   private turnInterval = 5 // Change direction every 5 seconds
   private boundarySize = 80 // Larger boundary for more movement space
   
-  constructor(scene: THREE.Scene) {
+  constructor(scene: THREE.Scene, camera: THREE.Camera, contactCallback?: () => void) {
     // Create texture loader
     const textureLoader = new THREE.TextureLoader()
     this.texture = textureLoader.load(
@@ -53,6 +58,10 @@ export class ZeppelinEntity {
       transparent: true,
     })
 
+    // Store camera and dialog callback
+    this.camera = camera
+    this.raycaster = new THREE.Raycaster()
+    this.contactCallback = contactCallback
     // Create sprite
     this.sprite = new THREE.Sprite(this.material)
     this.sprite.scale.set(5, 2.5, 1) // Adjusted scale to make it less flattened (more width, less height)
@@ -63,6 +72,23 @@ export class ZeppelinEntity {
     
     // Start animation
     this.play()
+    // Bind and add click listener for contact overlay
+    this.handleClickBound = this.handleZeppelinClick.bind(this)
+    window.addEventListener('click', this.handleClickBound)
+  }
+
+  private handleZeppelinClick(event: MouseEvent) {
+    // Calculate mouse position in NDC
+    const mouse = new THREE.Vector2(
+      (event.clientX / window.innerWidth) * 2 - 1,
+      -(event.clientY / window.innerHeight) * 2 + 1
+    )
+    this.raycaster.setFromCamera(mouse, this.camera)
+    const intersects = this.raycaster.intersectObject(this.sprite)
+    if (intersects.length > 0 && !this.hasTriggeredContact) {
+      this.hasTriggeredContact = true
+      this.contactCallback?.()
+    }
   }
 
   public setPosition(x: number, y: number, z: number) {
@@ -147,5 +173,13 @@ export class ZeppelinEntity {
 
   public getSprite(): THREE.Sprite {
     return this.sprite
+  }
+
+  public dispose() {
+    window.removeEventListener('click', this.handleClickBound)
+    // Remove sprite from scene to avoid duplicates
+    if (this.sprite.parent) {
+      this.sprite.parent.remove(this.sprite)
+    }
   }
 } 

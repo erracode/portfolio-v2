@@ -1,6 +1,6 @@
 import PixelBalloon from '../pixelated-balloon/pixelated-balloon'
 import styles from './MessageDialog.module.css'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
 export interface MessageDialogProps {
   message: string
@@ -9,18 +9,15 @@ export interface MessageDialogProps {
 }
 
 export default function MessageDialog({ message, iconSrc = '/react-logo.png', onNext }: MessageDialogProps) {
-  const [displayText, setDisplayText] = useState('')
-  const prevMessageRef = useRef<string>('')
+  // Initialize with first character to avoid blank on mount
+  const [displayText, setDisplayText] = useState(() => message.charAt(0) || '')
   useEffect(() => {
-    // Skip duplicate runs (StrictMode mount/unmount)
-    if (prevMessageRef.current === message) return
-    prevMessageRef.current = message
-    // Reset text and start typing
-    setDisplayText('')
-    let idx = 0
+    // Pre-show first character
+    setDisplayText(message.charAt(0) || '')
+    let idx = 1
     const interval = setInterval(() => {
+      setDisplayText(message.substring(0, idx + 1))
       idx += 1
-      setDisplayText(message.substring(0, idx))
       if (idx >= message.length) clearInterval(interval)
     }, 50)
     return () => clearInterval(interval)

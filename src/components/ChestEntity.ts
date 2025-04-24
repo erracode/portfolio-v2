@@ -10,6 +10,8 @@ export class ChestEntity {
   private camera: THREE.Camera
   private bouncingLogos: BouncingLogo[] = []
   private hasSpawnedLogos = false
+  private dialogCallback?: (msg: string) => void
+  private handleClickBound: (event: MouseEvent) => void
   
   // Logo configuration
   private logoConfigs = [
@@ -48,9 +50,10 @@ export class ChestEntity {
   private frameHeight = 254 // Height of a single frame
   private totalWidth = 508 // Total width of sprite sheet
   
-  constructor(scene: THREE.Scene, camera: THREE.Camera) {
+  constructor(scene: THREE.Scene, camera: THREE.Camera, dialogCallback?: (msg: string) => void) {
     this.camera = camera
     this.raycaster = new THREE.Raycaster()
+    this.dialogCallback = dialogCallback
     
     // Create texture loader
     const textureLoader = new THREE.TextureLoader()
@@ -92,8 +95,9 @@ export class ChestEntity {
     // Set initial state (closed)
     this.updateFrameUV()
     
-    // Add click event listener
-    window.addEventListener('click', this.handleClick.bind(this))
+    // Bind handleClick and add click event listener
+    this.handleClickBound = this.handleClick.bind(this)
+    window.addEventListener('click', this.handleClickBound)
   }
 
   public setPosition(x: number, y: number, z: number) {
@@ -131,6 +135,8 @@ export class ChestEntity {
       if (this.isOpen && !this.hasSpawnedLogos) {
         this.spawnLogos()
         this.hasSpawnedLogos = true
+        // Trigger dialog message for chest open
+        this.dialogCallback?.('These are my current skills!')
       }
     }
   }
@@ -138,38 +144,38 @@ export class ChestEntity {
   private spawnLogos() {
     // Get the chest position
     const chestPos = this.getPosition()
-    
+
     // Spawn each logo with its configured offset
-    this.logoConfigs.forEach((config, index) => {
+    for (const [index, config] of this.logoConfigs.entries()) {
       // Create a position above and in front of the chest for the logo to float
       const logoStartPos = new THREE.Vector3(
-        chestPos.x + config.xOffset, // Offset horizontally based on config
-        chestPos.y + 0.5, // Start above the chest
-        chestPos.z - 0.5  // Slightly in front of the chest
+        chestPos.x + config.xOffset,
+        chestPos.y + 0.5,
+        chestPos.z - 0.5
       )
-      
+
       // Create the bouncing logo
       const logo = new BouncingLogo(
         this.sprite.parent as THREE.Scene,
         config.path,
         logoStartPos
       )
-      
+
       // Activate the logo with a slight delay based on index
       setTimeout(() => {
         logo.activate()
-      }, index * 150) // 150ms delay between each logo
-      
+      }, index * 150)
+
       // Store the logo reference
       this.bouncingLogos.push(logo)
-    })
+    }
   }
 
   public update(delta: number) {
     // Update all logos
-    this.bouncingLogos.forEach(logo => {
+    for (const logo of this.bouncingLogos) {
       logo.update(delta)
-    })
+    }
   }
 
   private updateFrameUV() {
@@ -182,12 +188,15 @@ export class ChestEntity {
 
   public dispose() {
     // Clean up event listener when component is disposed
-    window.removeEventListener('click', this.handleClick.bind(this))
-    
+    window.removeEventListener('click', this.handleClickBound)
+    // Remove chest sprite from scene to prevent duplicates
+    if (this.sprite.parent) {
+      this.sprite.parent.remove(this.sprite)
+    }
     // Clean up all logos
-    this.bouncingLogos.forEach(logo => {
+    for (const logo of this.bouncingLogos) {
       logo.dispose()
-    })
+    }
     this.bouncingLogos = []
   }
 } 

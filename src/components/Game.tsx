@@ -15,11 +15,19 @@ import { GameCard } from './ui/GameCard'
 import { GameButton } from './ui/GameButton'
 import { experiences } from '../data/experienceData'
 import { ExperienceHallTitle } from './ui/ExperienceHallTitle'
+import { socialLinks } from '../data/socialLinks'
+import { SocialHallTitle } from './ui/SocialHallTitle'
+import { SocialLinkCard } from './ui/SocialLinkCard'
 
-// Helper type for extended controls state
+// Helper types for extended controls state and dialog
 type Controls = { update: () => void }
+interface SceneEntitiesProps {
+  onProjectActivate: (id: string) => void
+  onDialog?: (msg: string) => void
+  onContact?: () => void
+}
 
-function SceneEntities({ onProjectActivate }: { onProjectActivate: (id: string) => void }) {
+function SceneEntities({ onProjectActivate, onDialog, onContact }: SceneEntitiesProps) {
   const camera = useThree((state) => state.camera) as THREE.PerspectiveCamera
   const scene = useThree((state) => state.scene)
   const controls = useThree((state) => state.controls) as Controls
@@ -39,8 +47,8 @@ function SceneEntities({ onProjectActivate }: { onProjectActivate: (id: string) 
     const player = new PlayerController(camera, controls, scene)
     playerRef.current = player
     meRef.current = new MeEntity(scene)
-    zeppelinRef.current = new ZeppelinEntity(scene)
-    chestRef.current = new ChestEntity(scene, camera)
+    zeppelinRef.current = new ZeppelinEntity(scene, onContact)
+    chestRef.current = new ChestEntity(scene, camera, onDialog)
 
     // Append hidden player position tracker
     const playerPosElement = document.createElement('div')
@@ -66,7 +74,7 @@ function SceneEntities({ onProjectActivate }: { onProjectActivate: (id: string) 
       document.removeEventListener('sprite-loaded', onSpriteLoaded)
       chestRef.current?.dispose()
     }
-  }, [camera, controls, scene])
+  }, [camera, controls, scene, onDialog, onContact])
 
   useFrame((_, delta) => {
     controls.update()
@@ -83,11 +91,10 @@ function SceneEntities({ onProjectActivate }: { onProjectActivate: (id: string) 
       {/* Portfolio markers (clickable via mouse or keyboard) */}
       {portfolioItems.map((item) => {
         // Disable a11y rules for three.js mesh
-        /* eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/click-events-have-key-events, jsx-a11y/mouse-events-have-key-events */
+        /* eslint-disable-next-line jsx-a11y/role-has-required-aria-props, jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/interactive-supports-focus, jsx-a11y/click-events-have-key-events, jsx-a11y/mouse-events-have-key-events */
         return (
           <mesh
             key={item.id}
-            role="button"
             tabIndex={0}
             position={[item.position.x, item.position.y, item.position.z]}
             onClick={() => onProjectActivate(item.id)}
@@ -131,11 +138,33 @@ function SceneEntities({ onProjectActivate }: { onProjectActivate: (id: string) 
           </>
         )
       })()}
+      {/* Social links 'hall' to the left of center */}
+      {(() => {
+        const baseX = -8;
+        const baseY = 2;
+        const baseZ = -5;
+        const spacing = 2;
+        const titleX = baseX + ((socialLinks.length - 1) * spacing) / 2;
+        const titleY = baseY + 1.5;
+        return (
+          <>
+            <SocialHallTitle position={[titleX, titleY, baseZ]} />
+            {socialLinks.map((link, idx) => (
+              <SocialLinkCard
+                key={link.id}
+                link={link}
+                position={[baseX + idx * spacing, baseY, baseZ]}
+                size={120}
+              />
+            ))}
+          </>
+        );
+      })()}
     </>
   )
 }
 
-export default function Game({ onProjectActivate }: { onProjectActivate: (id: string) => void }) {
+export default function Game({ onProjectActivate, onDialog, onContact }: { onProjectActivate: (id: string) => void; onDialog?: (msg: string) => void; onContact?: () => void }) {
   return (
     <Canvas
       onContextLost={(e) => { e.preventDefault(); console.error('WebGL context lost'); }}
@@ -171,7 +200,7 @@ export default function Game({ onProjectActivate }: { onProjectActivate: (id: st
         }}
       />
       {/* Scene Entities */}
-      <SceneEntities onProjectActivate={onProjectActivate} />
+      <SceneEntities onProjectActivate={onProjectActivate} onDialog={onDialog} onContact={onContact} />
     </Canvas>
   )
 }

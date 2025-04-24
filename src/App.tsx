@@ -5,6 +5,7 @@ import { ExperienceOverlay } from './components/ExperienceOverlay'
 import { portfolioItems } from './data/portfolioData'
 import './index.css'
 import appStyles from './components/ui/AppOverlay.module.css'
+import MessageDialog from './components/ui/MessageDialog'
 
 function App() {
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -15,6 +16,7 @@ function App() {
       {/* 3D world */}
       <Game onProjectActivate={setActiveId} />
 
+      <MessageDialog message="Hello, adventurer!" />
       {/* Panel Overlay on left side */}
       {activeId && (
         <div className={appStyles.panel}>

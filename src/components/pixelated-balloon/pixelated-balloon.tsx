@@ -1,4 +1,4 @@
-import styles from './pixelated-ballon.module.css';
+import styles from './pixelated-balloon.module.css';
 
 const PixelBalloon = ({
   children,

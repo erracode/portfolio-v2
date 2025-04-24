@@ -1,0 +1,55 @@
+.pixelBalloon {
+	border-image-slice: 3;
+	border-image-width: 3;
+	border-image-repeat: stretch;
+	border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="8" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M3 1 h1 v1 h-1 z M4 1 h1 v1 h-1 z M2 2 h1 v1 h-1 z M5 2 h1 v1 h-1 z M1 3 h1 v1 h-1 z M6 3 h1 v1 h-1 z M1 4 h1 v1 h-1 z M6 4 h1 v1 h-1 z M2 5 h1 v1 h-1 z M5 5 h1 v1 h-1 z M3 6 h1 v1 h-1 z M4 6 h1 v1 h-1 z" fill="rgb(255,255,255)" /></svg>');
+	border-image-outset: 2;
+	position: relative;
+	display: inline-block;
+	padding: 1rem 1.5rem;
+	margin: 8px;
+	margin-bottom: 30px;
+	background: #212529;
+	font-family: "Press Start 2P", cursive;
+	font-weight: bold;
+	font-size: 16px;
+	color: #ffffff;
+  border-style: solid;
+  border-width: 4px;
+}
+
+/* Left-aligned balloon tail */
+.pixelBalloon.fromLeft::before {
+	content: "";
+	position: absolute;
+	bottom: -14px;
+	left: 20px;
+	width: 26px;
+	height: 10px;
+	background: #212529;
+	border-right: 4px solid #fff;
+	border-left: 4px solid #fff;
+}
+
+.pixelBalloon.fromLeft::after {
+	content: "";
+	position: absolute;
+	bottom: -18px;
+	left: 24px;
+	width: 18px;
+	height: 4px;
+	background: #212529;
+	box-shadow: -4px 0 #fff, 4px 0 #fff, -4px 4px #212529, 0 4px #fff, -8px 4px
+		#fff, -4px 8px #fff, -8px 8px #fff;
+}
+
+/* Remove bottom margin from last child */
+.pixelBalloon > :last-child {
+	margin-bottom: 0;
+}
+
+/* Paragraph styling */
+.pixelBalloon p {
+	margin-top: 0;
+	margin-bottom: 1rem;
+}

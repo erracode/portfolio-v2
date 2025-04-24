@@ -23,6 +23,9 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      'jsx-a11y/click-events-have-key-events': 'off',
+      'jsx-a11y/mouse-events-have-key-events': 'off',
+      'jsx-a11y/no-noninteractive-element-to-interactive-role': 'off',
     },
   },
 )

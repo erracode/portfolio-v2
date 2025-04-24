@@ -14,7 +14,33 @@ export class ChestEntity {
   // Logo configuration
   private logoConfigs = [
     { path: "/react-logo.png", xOffset: -0.8 },
-    { path: "/javascript-logo.png", xOffset: 0.8 }
+    { path: "/javascript-logo.png", xOffset: 0.8 },
+    // { path: "/typescript-logo.png", xOffset: 0.8 },
+    { path: "/nodejs-logo.png", xOffset: 1.5 },
+    { path: "/nextjs-logo.png", xOffset: -1.5 },
+    // { path: "/tailwindcss-logo.png", xOffset: 0.8 },
+    { path: "/css-logo.png", xOffset: 2.4 },
+    { path: "/html-logo.png", xOffset: -2.4 },
+    // { path: "/python-logo.png", xOffset: 0.8 },
+    { path: "/mongodb-logo.png", xOffset: 3.6 },
+    { path: "/mysql-logo.png", xOffset: -3.6 },
+    // { path: "/postgresql-logo.png", xOffset: 0.8 },
+    { path: "/wordpress-logo.png", xOffset: 4.8 },
+    { path: "/woocommerce-logo.png", xOffset: -4.8 },
+    { path: "/zustand-logo.png", xOffset: 5.4 },
+    { path: "/redux-logo.png", xOffset: -5.4 },
+    { path: "/postgres-logo.png", xOffset: 6.6 },
+    { path: "/tailwind-logo.png", xOffset: -6.6 },
+    { path: "/typescript-logo.png", xOffset: 7.2 },
+    { path: "/payloadcms-logo.png", xOffset: 8.4 },
+    { path: "/trpc-logo.png", xOffset: -8.4 },
+    { path: "/express-logo.png", xOffset: 9.6 },
+    { path: "/supabase-logo.png", xOffset: 10.8 },
+    // { path: "/docker-logo.png", xOffset: -6.6 },
+    // { path: "/kubernetes-logo.png", xOffset: 0.8 },
+    // { path: "/aws-logo.png", xOffset: 0.8 },
+    
+    
   ]
   
   // Sprite sheet configuration

@@ -68,9 +68,6 @@ export class PlayerController {
     // Set the sprite reference
     this.sprite = this.spriteFlipbook.getSprite()
 
-    // Initialize camera
-    this.initCamera()
-
     // Set up keyboard controls
     document.addEventListener(
       "keydown",
@@ -317,18 +314,6 @@ export class PlayerController {
     }
 
     return directionOffset
-  }
-
-  private initCamera() {
-    // Position camera behind player
-    this.orbitControls.target = this.spriteFlipbook.getPosition()
-    this.camera.position.z = this.spriteFlipbook.getPosition().z + 10
-    this.camera.position.x = this.spriteFlipbook.getPosition().x
-    this.camera.position.y = 5
-
-    // Limit camera rotation
-    this.orbitControls.maxPolarAngle = Math.PI / 2 - 0.1 // Prevent looking below ground
-    this.orbitControls.minPolarAngle = Math.PI / 6 // Prevent looking too high
   }
 
   public getSprite(): THREE.Sprite {

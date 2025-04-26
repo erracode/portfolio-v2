@@ -21,13 +21,12 @@ import { SocialLinkCard } from './ui/SocialLinkCard'
 
 // Helper types for extended controls state and dialog
 type Controls = { update: () => void }
-interface SceneEntitiesProps {
+export interface SceneEntitiesProps {
   onProjectActivate: (id: string) => void
-  onDialog?: (msg: string) => void
-  onContact?: () => void
+  onDialog: (msg: string) => void
 }
 
-function SceneEntities({ onProjectActivate, onDialog, onContact }: SceneEntitiesProps) {
+function SceneEntities({ onProjectActivate, onDialog }: SceneEntitiesProps) {
   const camera = useThree((state) => state.camera) as THREE.PerspectiveCamera
   const scene = useThree((state) => state.scene)
   const controls = useThree((state) => state.controls) as Controls
@@ -36,8 +35,9 @@ function SceneEntities({ onProjectActivate, onDialog, onContact }: SceneEntities
   const zeppelinRef = useRef<ZeppelinEntity | null>(null)
   const chestRef = useRef<ChestEntity | null>(null)
 
+  // Initialize controllers and entities once when controls become available
   useEffect(() => {
-    if (!controls) return
+    if (!controls || playerRef.current) return
 
     // Position camera
     camera.position.set(0, 5, 15)
@@ -47,7 +47,7 @@ function SceneEntities({ onProjectActivate, onDialog, onContact }: SceneEntities
     const player = new PlayerController(camera, controls, scene)
     playerRef.current = player
     meRef.current = new MeEntity(scene)
-    zeppelinRef.current = new ZeppelinEntity(scene, onContact)
+    zeppelinRef.current = new ZeppelinEntity(scene, camera, () => onDialog('CONTACT_REQUEST'))
     chestRef.current = new ChestEntity(scene, camera, onDialog)
 
     // Append hidden player position tracker
@@ -73,8 +73,9 @@ function SceneEntities({ onProjectActivate, onDialog, onContact }: SceneEntities
       document.body.removeChild(playerPosElement)
       document.removeEventListener('sprite-loaded', onSpriteLoaded)
       chestRef.current?.dispose()
+      zeppelinRef.current?.dispose()
     }
-  }, [camera, controls, scene, onDialog, onContact])
+  }, [camera, controls, scene, onDialog])
 
   useFrame((_, delta) => {
     controls.update()
@@ -164,7 +165,7 @@ function SceneEntities({ onProjectActivate, onDialog, onContact }: SceneEntities
   )
 }
 
-export default function Game({ onProjectActivate, onDialog, onContact }: { onProjectActivate: (id: string) => void; onDialog?: (msg: string) => void; onContact?: () => void }) {
+export default function Game({ onProjectActivate, onDialog }: { onProjectActivate: (id: string) => void; onDialog: (msg: string) => void }) {
   return (
     <Canvas
       onContextLost={(e) => { e.preventDefault(); console.error('WebGL context lost'); }}
@@ -200,7 +201,7 @@ export default function Game({ onProjectActivate, onDialog, onContact }: { onPro
         }}
       />
       {/* Scene Entities */}
-      <SceneEntities onProjectActivate={onProjectActivate} onDialog={onDialog} onContact={onContact} />
+      <SceneEntities onProjectActivate={onProjectActivate} onDialog={onDialog} />
     </Canvas>
   )
 }

@@ -10,7 +10,8 @@ import MessageDialog from './components/ui/MessageDialog'
 import ContactOverlay from './components/ContactOverlay'
 
 function App() {
-  const [activeId, setActiveId] = useState<string | null>(null)
+  const [selectedProject, setSelectedProject] = useState<string | null>(null)
+  const [selectedExperience, setSelectedExperience] = useState<string | null>(null)
   const [contactOpen, setContactOpen] = useState(false)
   // Manage dialog queue in state
   const [dialogQueue, setDialogQueue] = useState<string[]>([
@@ -27,12 +28,13 @@ function App() {
     }
   }, [])
   console.log('portfolioItems', portfolioItems)
-  console.log('activeId', activeId)
+  
   return (
     <div className={appStyles.container}>
       {/* 3D world */}
       <Game
-        onProjectActivate={setActiveId}
+        onProjectActivate={setSelectedProject}
+        onExperienceActivate={setSelectedExperience}
         onDialog={handleDialogTrigger}
       />
 
@@ -48,19 +50,20 @@ function App() {
         <ContactOverlay onClose={() => setContactOpen(false)} />
       )}
       {/* Panel Overlay on left side */}
-      {activeId && (
+      {selectedProject && (
         <div className={appStyles.panel}>
-          {portfolioItems.some((item) => item.id === activeId) ? (
-            <ProjectsOverlay
-              projectId={activeId}
-              onClose={() => setActiveId(null)}
-            />
-          ) : (
-            <ExperienceOverlay
-              experienceId={activeId}
-              onClose={() => setActiveId(null)}
-            />
-          )}
+          <ProjectsOverlay
+            projectId={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        </div>
+      )}
+      {selectedExperience && (
+        <div className={appStyles.panel}>
+          <ExperienceOverlay
+            experienceId={selectedExperience}
+            onClose={() => setSelectedExperience(null)}
+          />
         </div>
       )}
     </div>

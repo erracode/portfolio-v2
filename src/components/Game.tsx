@@ -25,10 +25,11 @@ import ProjectsShowcaseV2 from './projects-showcase-v2/ProjectsShowcaseV2'
 type Controls = { update: () => void }
 export interface SceneEntitiesProps {
   onProjectActivate: (id: string) => void
+  onExperienceActivate: (id: string) => void
   onDialog: (msg: string) => void
 }
 
-function SceneEntities({ onProjectActivate, onDialog }: SceneEntitiesProps) {
+function SceneEntities({ onProjectActivate, onExperienceActivate, onDialog }: SceneEntitiesProps) {
   const camera = useThree((state) => state.camera) as THREE.PerspectiveCamera
   const scene = useThree((state) => state.scene)
   const controls = useThree((state) => state.controls) as Controls
@@ -91,25 +92,7 @@ function SceneEntities({ onProjectActivate, onDialog }: SceneEntitiesProps) {
     <>
       {/* World */}
       <primitive object={createWorld()} />
-      {/* Portfolio markers (clickable via mouse or keyboard) */}
-      {portfolioItems.map((item) => {
-        // Disable a11y rules for three.js mesh
-        /* eslint-disable-next-line jsx-a11y/role-has-required-aria-props, jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/interactive-supports-focus, jsx-a11y/click-events-have-key-events, jsx-a11y/mouse-events-have-key-events */
-        return (
-          <mesh
-            key={item.id}
-            tabIndex={0}
-            position={[item.position.x, item.position.y, item.position.z]}
-            onClick={() => onProjectActivate(item.id)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') onProjectActivate(item.id)
-            }}
-          >
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color={0xaaaaaa} transparent opacity={0.7} />
-          </mesh>
-        )
-      })}
+ 
       {/* Work experience 'hall' opposite the Chest */}
       {/* Base position opposite Chest at (5,1,5) */}
       {(() => {
@@ -132,9 +115,9 @@ function SceneEntities({ onProjectActivate, onDialog }: SceneEntitiesProps) {
                 description={exp.description.join(' ')}
                 startDate={exp.startDate}
                 endDate={exp.endDate}
-                onClick={() => onProjectActivate(exp.id)}
+                onClick={() => onExperienceActivate(exp.id)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') onProjectActivate(exp.id)
+                  if (e.key === 'Enter' || e.key === ' ') onExperienceActivate(exp.id)
                 }}
               />
             ))}
@@ -171,7 +154,15 @@ function SceneEntities({ onProjectActivate, onDialog }: SceneEntitiesProps) {
   )
 }
 
-export default function Game({ onProjectActivate, onDialog }: { onProjectActivate: (id: string) => void; onDialog: (msg: string) => void }) {
+export default function Game({ 
+  onProjectActivate, 
+  onExperienceActivate, 
+  onDialog 
+}: { 
+  onProjectActivate: (id: string) => void; 
+  onExperienceActivate: (id: string) => void;
+  onDialog: (msg: string) => void 
+}) {
   return (
     <Canvas
       onContextLost={(e) => { e.preventDefault(); console.error('WebGL context lost'); }}
@@ -207,7 +198,11 @@ export default function Game({ onProjectActivate, onDialog }: { onProjectActivat
         }}
       />
       {/* Scene Entities */}
-      <SceneEntities onProjectActivate={onProjectActivate} onDialog={onDialog} />
+      <SceneEntities 
+        onProjectActivate={onProjectActivate} 
+        onExperienceActivate={onExperienceActivate}
+        onDialog={onDialog} 
+      />
     </Canvas>
   )
 }

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { X } from 'lucide-react'
 import { portfolioItems } from '../../data/portfolioData'
-import type { PortfolioItem } from '../../data/portfolioData'
-import styles from '../ui/ExperienceOverlay.module.css'
-import { GameButton } from '../ui/GameButton'
+import { ProjectOverlay } from './ProjectOverlay'
 
 export interface ProjectsOverlayProps {
   projectId: string
@@ -11,53 +8,14 @@ export interface ProjectsOverlayProps {
 }
 
 export function ProjectsOverlay({ projectId, onClose }: ProjectsOverlayProps) {
-  const [project, setProject] = useState<PortfolioItem | null>(null)
+  const [selectedProject, setSelectedProject] = useState(
+    portfolioItems.find((item) => item.id === projectId) || null
+  )
 
   useEffect(() => {
-    const found = portfolioItems.find((p) => p.id === projectId) || null
-    setProject(found)
+    const project = portfolioItems.find((item) => item.id === projectId)
+    setSelectedProject(project || null)
   }, [projectId])
 
-  if (!project) return null
-
-  return (
-    <div className={styles.overlayBackground}>
-      <div className={styles.overlayContent}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>{project.title}</h2>
-          <GameButton type="button" onClick={onClose} className={styles.closeButton}>
-            <X className="w-6 h-6 text-black" />
-          </GameButton>
-        </div>
-        
-        <div className={styles.imageContainer}>
-          <img src={project.image} alt={project.title} className={styles.projectImage} />
-        </div>
-        
-        <div className={styles.descriptionLine}>{project.description}</div>
-        
-        <h3 className={styles.sectionTitle}>Technologies</h3>
-        <div className={styles.techList}>
-          {project.technologies.map((tech) => (
-            <div key={tech} className={styles.techItem}>
-              <span>{tech}</span>
-            </div>
-          ))}
-        </div>
-        
-        {project.link && (
-          <div className={styles.buttonContainer}>
-            <a 
-              href={project.link} 
-              className={styles.button}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Visit Project
-            </a>
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  return <ProjectOverlay project={selectedProject} onClose={onClose} />
 } 

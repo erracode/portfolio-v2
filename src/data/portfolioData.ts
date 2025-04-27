@@ -38,3 +38,6 @@ export const portfolioItems = [
     },
   ]
   
+// Define the type for a portfolio item
+export type PortfolioItem = typeof portfolioItems[number]
+  

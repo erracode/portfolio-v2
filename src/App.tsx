@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import Game from './components/Game'
 import PortfolioOverlay from './components/PortfolioOverlay'
 import { ExperienceOverlay } from './components/ExperienceOverlay'
+import { ProjectsOverlay } from './components/projects-showcase-v2/ProjectsOverlay'
 import { portfolioItems } from './data/portfolioData'
 import './index.css'
 import appStyles from './components/ui/AppOverlay.module.css'
@@ -50,7 +51,7 @@ function App() {
       {activeId && (
         <div className={appStyles.panel}>
           {portfolioItems.some((item) => item.id === activeId) ? (
-            <PortfolioOverlay
+            <ProjectsOverlay
               projectId={activeId}
               onClose={() => setActiveId(null)}
             />

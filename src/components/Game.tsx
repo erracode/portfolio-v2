@@ -18,6 +18,8 @@ import { ExperienceHallTitle } from './ui/ExperienceHallTitle'
 import { socialLinks } from '../data/socialLinks'
 import { SocialHallTitle } from './ui/SocialHallTitle'
 import { SocialLinkCard } from './ui/SocialLinkCard'
+// import { ProjectShowcaseGame } from './project-showcase/project-showcase-game'
+import ProjectsShowcaseV2 from './projects-showcase-v2/ProjectsShowcaseV2'
 
 // Helper types for extended controls state and dialog
 type Controls = { update: () => void }
@@ -161,6 +163,10 @@ function SceneEntities({ onProjectActivate, onDialog }: SceneEntitiesProps) {
           </>
         );
       })()}
+      
+
+      {/* Projects showcase */}
+      <ProjectsShowcaseV2 onProjectActivate={onProjectActivate} />
     </>
   )
 }

@@ -36,11 +36,6 @@
   font-weight: bold;
 }
 
-.closeButton {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-}
 
 .bodyText {
   font-size: 0.875rem;

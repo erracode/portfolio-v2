@@ -1,10 +1,9 @@
-"use client"
-
 import { useEffect, useState } from "react"
-import { X } from "lucide-react"
+import { X, XIcon } from "lucide-react"
 import { portfolioItems } from "../data/portfolioData"
 import styles from './ui/PortfolioOverlay.module.css'
 import { GameButton } from './ui/GameButton'
+import { PixelButton } from "./ui/pixel-button"
 
 interface PortfolioOverlayProps {
   projectId: string
@@ -26,9 +25,11 @@ export default function PortfolioOverlay({ projectId, onClose }: PortfolioOverla
       <div className={styles.overlayContent}>
         <div className={styles.header}>
           <h2 className={styles.title}>{project.title}</h2>
-          <GameButton type="button" onClick={onClose} className={styles.closeButton}>
+          <PixelButton icon={<XIcon/>} onClick={onClose} size='small' variant='error'/>
+
+          {/* <GameButton type="button" onClick={onClose} className={styles.closeButton}>
             <X className="w-6 h-6" /> lol
-          </GameButton>
+          </GameButton> */}
         </div>
         <div className={styles.videoContainer}>
           <img src={project.image || '/placeholder.svg'} alt={project.title} />

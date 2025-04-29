@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from 'react'
 import Game from './components/Game'
-import PortfolioOverlay from './components/PortfolioOverlay'
-import { ExperienceOverlay } from './components/ExperienceOverlay'
-import { ProjectsOverlay } from './components/projects-showcase-v2/ProjectsOverlay'
+// import PortfolioOverlay from './components/PortfolioOverlay'
+import { ExperienceOverlay } from './components/halls/experience-hall/experience-overlay'
 import { portfolioItems } from './data/portfolioData'
 import './index.css'
 import appStyles from './components/ui/AppOverlay.module.css'
 import MessageDialog from './components/ui/MessageDialog'
 import ContactOverlay from './components/ContactOverlay'
+import { ProjectOverlay } from './components/halls/project-hall/project-overlay'
 
 function App() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null)
@@ -52,8 +52,8 @@ function App() {
       {/* Panel Overlay on left side */}
       {selectedProject && (
         <div className={appStyles.panel}>
-          <ProjectsOverlay
-            projectId={selectedProject}
+          <ProjectOverlay
+            project={portfolioItems.find((item) => item.id === selectedProject) ?? null}
             onClose={() => setSelectedProject(null)}
           />
         </div>

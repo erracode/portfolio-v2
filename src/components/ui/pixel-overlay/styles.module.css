@@ -1,0 +1,185 @@
+.overlayBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  z-index: 50;
+}
+
+.overlayContainer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.position-left {
+  left: 2rem;
+}
+
+.position-center {
+  left: 0;
+  right: 0;
+  justify-content: center;
+}
+
+.position-right {
+  right: 2rem;
+}
+
+.overlayContentWrapper {
+  position: relative;
+  max-width: 100%;
+  max-height: 90vh;
+  display: flex;
+}
+
+.overlayContent {
+  background: #212529;
+  width: 100%;
+  height: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Press Start 2P", cursive;
+  color: #ffffff;
+  position: relative;
+  border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(255,255,255)" /></svg>');
+  border-image-outset: 0;
+  border-image-slice: 2;
+  border-image-width: 2;
+  border-style: solid;
+  border-width: 4px;
+  overflow: hidden; /* Prevent content from causing the overlay to expand */
+}
+
+.overlayHeader {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  border-bottom: 4px solid;
+  border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(255,255,255)" /></svg>');
+  border-image-slice: 2;
+  border-image-width: 2;
+  border-image-repeat: repeat;
+  border-image-outset: 0;
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.overlayTitle {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+  word-break: break-word; /* Allow long titles to wrap */
+}
+
+.overlaySubtitle {
+  font-size: 0.75rem;
+  color: #a0a0a0;
+}
+
+.overlayContentBody {
+  padding: 24px 24px 24px 24px; /* Reduced right padding to make room for scrollbar */
+  font-size: 0.75rem;
+  line-height: 1.4;
+  overflow-y: auto; /* Only allow vertical scrolling in the content area */
+  flex-grow: 1; /* Allow content to grow and take available space */
+  width: 100%; /* Ensure content takes full width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.overlayFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px 24px;
+  border-top: 4px solid;
+  border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(255,255,255)" /></svg>');
+  border-image-slice: 2;
+  border-image-width: 2;
+  border-image-repeat: repeat;
+  border-image-outset: 0;
+  gap: 12px;
+  flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Press Start 2P", cursive;
+  text-decoration: none;
+  cursor: pointer;
+  background: #e76e55;
+  color: white;
+  box-shadow: #8c2022 4px 4px 0px 0px inset;
+  padding: 4px;
+  font-size: 10px;
+  transition: all 0.1s ease;
+  border: none;
+  outline: none;
+  margin: 0;
+  width: 24px;
+  height: 24px;
+  z-index: 60;
+}
+
+.closeButton:hover {
+  transform: translateY(-2px);
+}
+
+.closeButton:active {
+  transform: translateY(2px);
+}
+
+.closeButton::before,
+.closeButton::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+}
+
+.closeButton::before {
+  top: -4px;
+  left: 0px;
+  border-top: 4px solid #ffffff;
+  border-bottom: 4px solid #ffffff;
+}
+
+.closeButton::after {
+  left: -4px;
+  top: 0px;
+  border-left: 4px solid #ffffff;
+  border-right: 4px solid #ffffff;
+}
+
+/* Custom scrollbar for the pixel art theme */
+.overlayContentBody::-webkit-scrollbar {
+  width: 12px;
+  display: block; /* Ensure scrollbar is always visible */
+}
+
+.overlayContentBody::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+.overlayContentBody::-webkit-scrollbar-thumb {
+  background-color: #92cc41;
+  border: 2px solid #121212;
+}
+
+/* For Firefox */
+.overlayContentBody {
+  scrollbar-width: thin;
+  scrollbar-color: #92cc41 #121212;
+}

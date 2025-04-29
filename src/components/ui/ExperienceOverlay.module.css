@@ -38,40 +38,6 @@
   margin-bottom: 1rem;
 }
 
-.closeButton {
-  all: unset;
-  cursor: pointer;
-  position: absolute;
-  background: #ffffff;
-  padding: 4px;
-  top: -16px;
-  right: -16px;
-  z-index: 50;
-  color:#ffffff;
-  box-shadow: #8c2022 4px -4px 0px 0px inset;
-  background: #e76e55;
-}
-.closeButton:hover {
-  color: #fff;
-  text-decoration: none;
-  background-color: #ce372b;
-  box-shadow: #8c2022 6px -6px 0px 0px inset;
-
-}
-.closeButton::before {
-  top: -4px;
-  left: 0px;
-
-  border-top: 4px solid rgb(242, 242, 242);
-  border-bottom: 4px solid rgb(242, 242, 242);
-}
-.closeButton::after {
-  left: -4px;
-  top: 0px;
-  border-left: 4px solid rgb(242, 242, 242);
-  border-right: 4px solid rgb(242, 242, 242);
-
-}
 
 .timestamp {
   margin-bottom: 1rem;

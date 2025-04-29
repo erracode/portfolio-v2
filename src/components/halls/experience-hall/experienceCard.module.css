@@ -1,0 +1,43 @@
+.card {
+  width: 280px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  
+}
+
+.header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.timestamp {
+  font-size: 10px;
+  color: #a0a0a0;
+  margin-top: 4px;
+}
+
+.title {
+  font-size: 14px;
+}
+
+.content {
+  font-size: 12px;
+  line-height: 1.4;
+}

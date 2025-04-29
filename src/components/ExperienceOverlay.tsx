@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { X } from 'lucide-react'
+import { X, XIcon } from 'lucide-react'
 import { experiences } from '../data/experienceData'
 import type { Experience } from '../data/experienceData'
 import styles from './ui/ExperienceOverlay.module.css'
 import { GameButton } from './ui/GameButton'
+import { CloseButton } from './ui/close-button'
+import { PixelButton } from './ui/pixel-button'
 
 export interface ExperienceOverlayProps {
   experienceId: string
@@ -25,9 +27,8 @@ export function ExperienceOverlay({ experienceId, onClose }: ExperienceOverlayPr
       <div className={styles.overlayContent}>
         <div className={styles.header}>
           <h2 className={styles.title}>{`${exp.role} @ ${exp.company}`}</h2>
-          <GameButton type="button" onClick={onClose} className={styles.closeButton}>
-            <X className="w-6 h-6 text-black" />
-          </GameButton>
+          {/* <CloseButton onClick={onClose} /> */}
+          <PixelButton icon={<XIcon/>} onClick={onClose} size='small' variant='error'/>
         </div>
         {exp.startDate && exp.endDate && (
           <div className={styles.timestamp}>{`${exp.startDate} - ${exp.endDate}`}</div>

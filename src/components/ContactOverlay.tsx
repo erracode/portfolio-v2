@@ -1,7 +1,9 @@
 import React from 'react'
-import { X } from 'lucide-react'
+import { X, XIcon } from 'lucide-react'
 import styles from './ui/ContactOverlay.module.css'
 import { GameButton } from './ui/GameButton'
+import { CloseButton } from './ui/close-button'
+import { PixelButton } from './ui/pixel-button'
 
 interface ContactOverlayProps {
   onClose: () => void
@@ -13,9 +15,7 @@ export default function ContactOverlay({ onClose }: ContactOverlayProps) {
       <div className={styles.overlayContent}>
         <div className={styles.header}>
           <h2 className={styles.title}>Let's Work Together</h2>
-          <GameButton type="button" onClick={onClose} className={styles.closeButton}>
-            <X className="w-6 h-6 text-black" />
-          </GameButton>
+          <PixelButton icon={<XIcon/>} onClick={onClose} size='small' variant='error'/>
         </div>
         <p className={styles.bodyText}>
           Do you want to work with me or develop a project together? I'd love to hear from you!

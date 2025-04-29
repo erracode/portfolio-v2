@@ -1,0 +1,30 @@
+.projectCard {
+  width: 200px;
+  height: 200px;
+  transition: transform 0.2s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-5px);
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.projectImage {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border-radius: 4px;
+}
+
+.projectTitle {
+  font-size: 12px;
+  text-align: center;
+}

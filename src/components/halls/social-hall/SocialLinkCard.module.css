@@ -1,0 +1,33 @@
+.button {
+    all: unset;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+  .card {
+    width: 180px;
+    height: 180px;
+    transition: transform 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .cardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+  
+  .icon {
+    margin-bottom: 12px;
+  }
+  
+  .title {
+    font-size: 12px;
+    text-align: center;
+  }
+  

@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './GameButton.module.css'
 
 export interface GameButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

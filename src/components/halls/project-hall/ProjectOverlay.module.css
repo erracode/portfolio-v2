@@ -1,0 +1,186 @@
+/* Carousel styles */
+.carouselContainer {
+    width: 100%;
+    margin: 0 0 16px 0;
+    position: relative;
+    border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(255,255,255)" /></svg>');
+    border-image-outset: 0;
+    border-image-slice: 2;
+    border-image-width: 2;
+    border-style: solid;
+    border-width: 4px;
+    box-sizing: border-box; /* Include border in width calculation */
+  }
+  
+  .carousel {
+    overflow: hidden;
+  }
+  
+  .carouselSlides {
+    display: flex;
+    height: 150px;
+  }
+  
+  .carouselSlide {
+    flex: 0 0 100%;
+    min-width: 0;
+    position: relative;
+  }
+  
+  .carouselImage {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+  
+  .carouselButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    flex-wrap: wrap; /* Allow buttons to wrap if needed */
+  }
+  
+  .carouselButton {
+    background: #e76e55;
+    border: none;
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+    font-family: "Press Start 2P", cursive;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 8px;
+    color: white;
+    box-shadow: #8c2022 2px -2px 0px 0px inset;
+
+
+  }
+  
+  .carouselButton:hover {
+    background-color: #ce372b;
+    box-shadow: #8c2022 3px -3px 0px 0px inset;
+  }
+
+  /* .carouselButton::before,
+.carouselButton::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+}
+  .carouselButton::before {
+    top: -4px;
+    left: 0px;
+    border-top: 4px solid #ffffff;
+    border-bottom: 4px solid #ffffff;
+  }
+  .carouselButton::after {
+    left: -4px;
+    top: 0px;
+    border-left: 4px solid #ffffff;
+    border-right: 4px solid #ffffff;
+  } 
+   */
+  
+  .carouselDots {
+    display: flex;
+    justify-content: center;
+    padding: 0 8px;
+    flex-wrap: wrap;
+    max-width: 200px;
+  }
+  
+  .carouselDot {
+    background-color: #444;
+    border: none;
+    width: 8px;
+    height: 8px;
+    margin: 0 4px 4px 4px; /* Added bottom margin for wrapped dots */
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  .carouselDotSelected {
+    background-color: rgb(146, 205, 65);
+  }
+  
+  /* Single image container */
+  .projectImageContainer {
+    width: 100%;
+    height: 150px;
+    margin: 0 0 16px 0;
+    overflow: hidden;
+    border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="rgb(255,255,255)" /></svg>');
+    border-image-outset: 0;
+    border-image-slice: 2;
+    border-image-width: 2;
+    border-style: solid;
+    border-width: 4px;
+    box-sizing: border-box; /* Include border in width calculation */
+  }
+  
+  .projectDetailImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Content container */
+  .contentContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  /* Description */
+  .description {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    word-break: break-word;
+    max-width: 100%; /* Ensure text doesn't overflow */
+  }
+  
+  /* Tech section */
+  .techSection {
+    margin-top: 16px;
+    max-width: 100%; /* Ensure section doesn't overflow */
+  }
+  
+  .techTitle {
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .techGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%; /* Ensure grid doesn't overflow */
+  }
+  
+  .techItem {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    max-width: 100%; /* Ensure items don't overflow */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  .techLogo {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    flex-shrink: 0; /* Prevent logo from shrinking */
+  }
+  

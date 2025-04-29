@@ -6,6 +6,7 @@ export interface Experience {
   startDate: string
   endDate: string | 'Present'
   location: string
+  logo?: string
   description: string[]
   techStack: {
     label: string

@@ -1,0 +1,81 @@
+/* Title section with company logo */
+.titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .companyLogo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  
+  /* Content container */
+  .contentContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Date range */
+  .dateRange {
+    font-size: 0.75rem;
+    color: #a0a0a0;
+    margin-bottom: 16px;
+  }
+  
+  /* Description */
+  .description {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    word-break: break-word;
+  }
+  
+  .descriptionLine {
+    margin-bottom: 12px;
+  }
+  
+  .descriptionLine:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Tech section */
+  .techSection {
+    margin-top: 16px;
+    max-width: 100%;
+  }
+  
+  .techTitle {
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .techGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+  }
+  
+  .techItem {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .techLogo {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+  

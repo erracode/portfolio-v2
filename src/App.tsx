@@ -6,7 +6,7 @@ import { portfolioItems } from './data/portfolioData'
 import './index.css'
 import appStyles from './components/ui/AppOverlay.module.css'
 import MessageDialog from './components/ui/MessageDialog'
-import ContactOverlay from './components/ContactOverlay'
+import { ContactOverlay } from './components/contact-overlay'
 import { ProjectOverlay } from './components/halls/project-hall/project-overlay'
 
 function App() {
@@ -47,7 +47,8 @@ function App() {
       )}
       {/* Contact overlay when Zeppelin is clicked */}
       {contactOpen && (
-        <ContactOverlay onClose={() => setContactOpen(false)} />
+        // <ContactOverlay onClose={() => setContactOpen(false)} />
+        <ContactOverlay isOpen={contactOpen} onClose={() => setContactOpen(false)} />
       )}
       {/* Panel Overlay on left side */}
       {selectedProject && (

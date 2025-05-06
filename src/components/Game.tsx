@@ -45,10 +45,14 @@ function SceneEntities({
   const zeppelinRef = useRef<ZeppelinEntity | null>(null)
   const chestRef = useRef<ChestEntity | null>(null)
   const [gameOver, setGameOver] = useState(false)
+  const entitiesInitialized = useRef(false)
 
   // Initialize controllers and entities once when controls become available
   useEffect(() => {
+    // Keep the original condition to prevent multiple initializations
     if (!controls || playerRef.current) return
+
+    console.log("Initializing game entities...")
 
     // Position camera
     camera.position.set(0, 5, 15)
@@ -118,9 +122,25 @@ function SceneEntities({
     }
 
     playerRef.current = player
-    meRef.current = new MeEntity(scene, camera, onDialog)
-    zeppelinRef.current = new ZeppelinEntity(scene, camera, () => onDialog("CONTACT_REQUEST"))
-    chestRef.current = new ChestEntity(scene, camera, onDialog)
+
+    // Create entities with a slight delay to ensure proper initialization
+    setTimeout(() => {
+      console.log("Creating zeppelin and chest entities...")
+
+      // Create MeEntity
+      meRef.current = new MeEntity(scene, camera, onDialog)
+
+      // Create ZeppelinEntity - explicitly set position after creation
+      zeppelinRef.current = new ZeppelinEntity(scene, camera, () => onDialog("CONTACT_REQUEST"))
+      console.log("Zeppelin created:", zeppelinRef.current)
+
+      // Create ChestEntity - explicitly set position after creation
+      chestRef.current = new ChestEntity(scene, camera, onDialog)
+      console.log("Chest created:", chestRef.current)
+
+      // Mark entities as initialized
+      entitiesInitialized.current = true
+    }, 500)
 
     // Append hidden player position tracker
     const playerPosElement = document.createElement("div")
@@ -141,19 +161,47 @@ function SceneEntities({
     return () => {
       document.body.removeChild(playerPosElement)
       document.removeEventListener("sprite-loaded", onSpriteLoaded)
-      chestRef.current?.dispose()
-      zeppelinRef.current?.dispose()
+
+      // Clean up entities
+      if (chestRef.current) {
+        console.log("Disposing chest entity")
+        chestRef.current.dispose()
+      }
+
+      if (zeppelinRef.current) {
+        console.log("Disposing zeppelin entity")
+        zeppelinRef.current.dispose()
+      }
     }
   }, [camera, controls, scene, onDialog, playerRef, onGameOver])
 
   useFrame((_, delta) => {
     if (gameOver) return // Skip updates if game is over
 
-    controls.update()
+    // Only try to update controls if they exist
+    if (controls) {
+      try {
+        controls.update()
+      } catch (error) {
+        console.error("Error updating controls:", error)
+      }
+    }
+
+    // Update player
     playerRef.current?.update(delta)
-    meRef.current?.update(delta)
-    zeppelinRef.current?.update(delta)
-    chestRef.current?.update(delta)
+
+    // Update other entities only if they've been initialized
+    if (entitiesInitialized.current) {
+      if (meRef.current) meRef.current.update(delta)
+
+      if (zeppelinRef.current) {
+        zeppelinRef.current.update(delta)
+      }
+
+      if (chestRef.current) {
+        chestRef.current.update(delta)
+      }
+    }
   })
 
   return (

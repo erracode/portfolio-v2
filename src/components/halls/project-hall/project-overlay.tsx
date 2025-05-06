@@ -99,7 +99,7 @@ export function ProjectOverlay({ project, onClose }: ProjectOverlayProps) {
   const projectYear = project.date ? new Date(project.date).getFullYear() : null
 
   return (
-    <PixelOverlay isOpen={!!project} onClose={onClose} position="left" width={400}>
+    <PixelOverlay isOpen={!!project} onClose={onClose} position="right" width={400}>
       <PixelOverlay.Header>
         <PixelOverlay.Title>{project.title}</PixelOverlay.Title>
         {projectYear && <PixelOverlay.Subtitle>{projectYear}</PixelOverlay.Subtitle>}

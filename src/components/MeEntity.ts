@@ -8,6 +8,10 @@ export class MeEntity {
   private frameTime = 0
   private isPlaying = false
   private isFacingRight = false
+  private dialogCallback?: (msg: string) => void
+  private raycaster: THREE.Raycaster
+  private camera: THREE.Camera
+  private handleClickBound: (event: MouseEvent) => void
   
   // Sprite sheet configuration
   private totalFrames = 9
@@ -15,7 +19,11 @@ export class MeEntity {
   private frameHeight = 250 // Each frame is 250px high
   private animationSpeed = 0.1 // seconds per frame
 
-  constructor(scene: THREE.Scene) {
+  constructor(scene: THREE.Scene, camera: THREE.Camera, dialogCallback?: (msg: string) => void) {
+    this.camera = camera
+    this.raycaster = new THREE.Raycaster()
+    this.dialogCallback = dialogCallback
+    
     // Create texture loader
     const textureLoader = new THREE.TextureLoader()
     this.texture = textureLoader.load(
@@ -56,6 +64,33 @@ export class MeEntity {
     
     // Start animation
     this.play()
+    
+    // Bind handleClick and add click event listener
+    this.handleClickBound = this.handleClick.bind(this)
+    window.addEventListener('click', this.handleClickBound)
+  }
+
+  private handleClick(event: MouseEvent) {
+    // Calculate mouse position in normalized device coordinates (-1 to +1)
+    const mouse = new THREE.Vector2(
+      (event.clientX / window.innerWidth) * 2 - 1,
+      -(event.clientY / window.innerHeight) * 2 + 1
+    )
+    
+    // Update the picking ray with the camera and mouse position
+    this.raycaster.setFromCamera(mouse, this.camera)
+    
+    // Calculate objects intersecting the picking ray
+    const intersects = this.raycaster.intersectObject(this.sprite)
+    
+    if (intersects.length > 0) {
+      // Trigger dialog message when clicked
+      this.dialogCallback?.(
+        "Hi! I'm Jesús from Maracaibo, Venezuela 🇻🇪 🎮\n\n" +
+        "Software Engineer at Sundevs\n" +
+        "Let's connect and build something great!"
+    );
+    }
   }
 
   public setPosition(x: number, y: number, z: number) {
@@ -92,7 +127,6 @@ export class MeEntity {
 
   private updateFrameUV() {
     // Calculate the position in the sprite sheet
-    // The sprite sheet is 2250px wide with 9 frames, each 250px wide
     const frameWidth = 250 / 2250 // Normalized width of a single frame
     
     // Apply the offset to the texture
@@ -113,4 +147,13 @@ export class MeEntity {
   public getSprite(): THREE.Sprite {
     return this.sprite
   }
-} 
+
+  public dispose() {
+    // Clean up event listener when component is disposed
+    window.removeEventListener('click', this.handleClickBound)
+    // Remove sprite from scene to prevent duplicates
+    if (this.sprite.parent) {
+      this.sprite.parent.remove(this.sprite)
+    }
+  }
+}

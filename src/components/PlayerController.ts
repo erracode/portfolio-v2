@@ -371,4 +371,5 @@ export class PlayerController {
     const pos = this.spriteFlipbook.getPosition()
     this.jumpAnimation.setPosition(pos.x, pos.y, pos.z)
   }
+  
 }

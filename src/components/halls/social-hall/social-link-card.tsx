@@ -20,7 +20,7 @@ export function SocialLinkCard({ link, position, size = 64 }: SocialLinkCardProp
       >
         <PixelCard className={styles.card}>
           <PixelCard.Content className={styles.cardContent}>
-            <img src="/react-logo.png" alt={link.title} className={styles.icon} style={{ width: size, height: size }} />
+            <img src={link.icon} alt={link.title} className={styles.icon} style={{ width: size, height: size }} />
             <PixelCard.Title className={styles.title}>{link.title}</PixelCard.Title>
           </PixelCard.Content>
         </PixelCard>

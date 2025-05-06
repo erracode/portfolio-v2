@@ -8,7 +8,7 @@ export interface MessageDialogProps {
   onNext?: () => void
 }
 
-export default function MessageDialog({ message, iconSrc = '/react-logo.png', onNext }: MessageDialogProps) {
+export default function MessageDialog({ message, iconSrc = '/talk-icon.png', onNext }: MessageDialogProps) {
   // Initialize with first character to avoid blank on mount
   const [displayText, setDisplayText] = useState(() => message.charAt(0) || '')
   useEffect(() => {

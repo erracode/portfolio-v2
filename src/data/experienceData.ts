@@ -24,6 +24,7 @@ export const experiences: Experience[] = [
     startDate: 'Jan 2023',
     endDate: 'Present',
     location: 'Colombia',
+    logo: '/sundevs-logo.png',
     description: [
       'Part of the team in charge of Cinemark Colombia website, building the frontend with Next.js and React, and contributing to backend microservices.',
     ],
@@ -57,7 +58,6 @@ export const experiences: Experience[] = [
         logo: '/express-logo.png',
       },
     ],
-    // techStack: ['React', 'Next.js', 'MongoDB', 'Redux', 'Supabase', 'PayloadCMS', 'tRPC', 'PostgreSQL'],
     position: [5, 1.5, -3],
   },
   {
@@ -68,6 +68,7 @@ export const experiences: Experience[] = [
     startDate: 'Feb 2021',
     endDate: 'Present',
     location: 'United States',
+    logo: '/awsh-logo.jpg',
     description: [
       'Developed scalable web applications and automated testing tools for cloud services.',
     ],
@@ -151,6 +152,7 @@ export const experiences: Experience[] = [
     startDate: 'Jan 2021',
     endDate: 'Jan 2023',
     location: 'Panamá, Panama',
+    logo: '/studio-logo.png',
     description: [
       'Coordinated development of marketing websites, landing pages, and e-commerce platforms for various clients.',
     ],
@@ -186,6 +188,7 @@ export const experiences: Experience[] = [
     startDate: 'Sep 2022',
     endDate: 'Nov 2022',
     location: 'Sacramento, CA',
+    logo: '/everythingwebsites-logo.png',
     description: [
       'Provided freelance WordPress development and support for various client websites.',
     ],
@@ -209,6 +212,7 @@ export const experiences: Experience[] = [
     startDate: 'Apr 2022',
     endDate: 'Jun 2022',
     location: 'Argentina',
+    logo: '/eduqueo-logo.png',
     description: [
       'Built API infrastructure integrating Tasker inputs with Airtable and analytics dashboards.',
     ],
@@ -240,6 +244,8 @@ export const experiences: Experience[] = [
     startDate: 'Feb 2020',
     endDate: 'Mar 2021',
     location: 'Maracaibo, Venezuela',
+    logo: '/talk-icon.png',
+    // logo: '/inverdata-logo.png',
     description: [
       'Developed a point-of-sale system in Java and a Django-based inventory web application.',
     ],

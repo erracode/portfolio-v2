@@ -23,7 +23,7 @@ export function ExperienceOverlay({ experienceId, onClose }: ExperienceOverlayPr
   if (!exp) return null
 
   return (
-    <PixelOverlay isOpen={!!exp} onClose={onClose} position="left" width={400}>
+    <PixelOverlay isOpen={!!exp} onClose={onClose} position="right" width={400}>
       <PixelOverlay.Header>
         <div className={styles.titleContainer}>
           {exp.logo && (

@@ -25,7 +25,7 @@ export function ProjectCard({ position, project, onClick }: ProjectCardProps) {
       >
         <PixelCard className={styles.projectCard}>
           <PixelCard.Content className={styles.cardContent}>
-            <img src={project.image || "/placeholder.svg"} alt={project.title} className={styles.projectImage} />
+            <img src={project.image[0] || "/placeholder.svg"} alt={project.title} className={styles.projectImage} />
             <PixelCard.Title className={styles.projectTitle}>{project.title}</PixelCard.Title>
           </PixelCard.Content>
         </PixelCard>

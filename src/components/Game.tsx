@@ -56,7 +56,7 @@ function SceneEntities({
 		// Initialize controllers and entities
 		const player = new PlayerController(camera, controls, scene);
 		playerRef.current = player;
-		meRef.current = new MeEntity(scene);
+		meRef.current = new MeEntity(scene,camera,onDialog);
 		zeppelinRef.current = new ZeppelinEntity(scene, camera, () =>
 			onDialog("CONTACT_REQUEST"),
 		);

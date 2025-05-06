@@ -9,7 +9,7 @@ export const socialLinks: SocialLink[] = [
   {
     id: 'github',
     title: 'GitHub',
-    icon: '/github-logo.png',
+    icon: '/github-logo.svg',
     url: 'https://github.com/yourusername',
   },
   {

@@ -1,0 +1,105 @@
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.gamepad {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  pointer-events: none;
+  user-select: none;
+  touch-action: none;
+  z-index: 20;
+}
+
+.joystick {
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  background: rgba(10, 10, 14, 0.55);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  position: relative;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.joystick::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 999px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.knob {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #fdf6ff, #c48bff);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  position: absolute;
+  top: 34px;
+  left: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1024;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  transition: transform 80ms ease-out;
+  box-shadow: 0 10px 25px rgba(105, 70, 140, 0.45);
+  touch-action: none;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+.actionButton {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  background: radial-gradient(circle at 25% 25%, #fff8f0, #ffa45c);
+  color: #581c42;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 25px rgba(255, 129, 41, 0.35);
+  touch-action: none;
+  user-select: none;
+  animation: pulse 2.5s infinite;
+}
+
+.actionButton.secondary {
+  background: radial-gradient(circle at 25% 25%, #f5f4ff, #6b8bff);
+  color: #121b3a;
+  box-shadow: 0 12px 25px rgba(88, 119, 255, 0.35);
+}
+
+.actionButton:active {
+  transform: scale(0.94);
+}

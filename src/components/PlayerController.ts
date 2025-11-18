@@ -5,6 +5,8 @@ import { IDLE_LEFT, IDLE_RIGHT, WALK_LEFT, WALK_RIGHT, type SpriteAnimation } fr
 import { JumpAnimation } from "./JumpAnimation"
 import { AxeAnimation } from "./AxeAnimation"
 
+type MovementKey = "w" | "a" | "s" | "d" | "space"
+
 export class PlayerController {
   // Constants
   private ANIMATION_DURATION_SECONDS_IDLE = 3
@@ -30,7 +32,7 @@ export class PlayerController {
   private isJumping = false
   private jumpVelocity = 0
   private jumpTime = 0
-  private keysPressed = { w: false, a: false, s: false, d: false, space: false }
+  private keysPressed: Record<MovementKey, boolean> = { w: false, a: false, s: false, d: false, space: false }
   private currentAnimation: SpriteAnimation = IDLE_RIGHT
   private canJump = true
   private jumpStartY = 0
@@ -147,48 +149,66 @@ export class PlayerController {
 
   private setupControls() {
     // Add mouse click handler
-    document.addEventListener('contextmenu', (event) => {
-      event.preventDefault() // Prevent default right-click menu
-      this.handleAxeThrow(event)
-    }, false)
+    document.addEventListener(
+      "contextmenu",
+      (event) => {
+        event.preventDefault() // Prevent default right-click menu
+        this.triggerAxeThrowAtNormalizedPosition()
+      },
+      false,
+    )
 
     // Add mouse move handler
-    document.addEventListener('mousemove', (event) => {
-      // Update normalized mouse coordinates (-1 to +1)
-      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-    }, false)
+    document.addEventListener(
+      "mousemove",
+      (event) => {
+        // Update normalized mouse coordinates (-1 to +1)
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+      },
+      false,
+    )
   }
 
-  private handleAxeThrow(event: MouseEvent) {
+  private attemptAxeThrow() {
     const currentTime = performance.now() / 1000 // Convert to seconds
-    
+
     // Check cooldown
     if (currentTime - this.lastThrowTime < this.AXE_THROW_COOLDOWN) {
       return
     }
-    
+
     // Update raycaster with current mouse position and camera
     this.raycaster.setFromCamera(this.mouse, this.camera)
-    
+
     // Create a plane at the player's height to intersect with
     const throwPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -this.GROUND_Y)
     const targetPoint = new THREE.Vector3()
-    
+
     // Find the intersection point of the ray with the plane
     this.raycaster.ray.intersectPlane(throwPlane, targetPoint)
-    
+
     if (targetPoint) {
       // Calculate throw direction
       const playerPos = this.spriteFlipbook.getPosition()
       const throwDirection = new THREE.Vector3()
         .subVectors(targetPoint, playerPos)
         .normalize()
-      
+
       // Start the throw
       this.axeAnimation.throw(playerPos, throwDirection)
       this.lastThrowTime = currentTime
     }
+  }
+
+  public triggerAxeThrowAtNormalizedPosition(normalizedX = this.mouse.x, normalizedY = this.mouse.y) {
+    this.mouse.x = THREE.MathUtils.clamp(normalizedX, -1, 1)
+    this.mouse.y = THREE.MathUtils.clamp(normalizedY, -1, 1)
+    this.attemptAxeThrow()
+  }
+
+  public setKeyState(key: MovementKey, pressed: boolean) {
+    this.keysPressed[key] = pressed
   }
 
   public update(deltaTime: number) {

@@ -1,0 +1,46 @@
+.header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 0.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatar {
+	width: 96px;
+	height: 96px;
+	border-radius: 50%;
+	border: 3px solid rgba(255, 255, 255, 0.2);
+	object-fit: cover;
+	image-rendering: pixelated;
+}
+
+.name {
+	font-family: "Press Start 2P", monospace;
+	font-size: 0.9rem;
+	color: #fff;
+	margin: 0.5rem 0 0;
+	letter-spacing: 0.02em;
+}
+
+.title {
+	font-size: 0.875rem;
+	color: rgba(255, 255, 255, 0.7);
+	margin: 0;
+}
+
+.location {
+	font-size: 0.75rem;
+	color: rgba(255, 255, 255, 0.5);
+	margin: 0;
+}
+
+.bio {
+	font-size: 0.875rem;
+	color: rgba(255, 255, 255, 0.6);
+	margin: 0.5rem 0 0;
+	max-width: 280px;
+	line-height: 1.5;
+}

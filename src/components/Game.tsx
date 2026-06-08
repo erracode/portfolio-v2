@@ -20,6 +20,7 @@ import { ExperienceHall } from "./halls/experience-hall"
 import { EnhancedEnemySpawner } from "./enhanced-enemy-spawner" // Import the enhanced enemy spawner
 import { FloatingHealthBar } from "./floating-health-bar" // Import the floating health bar
 import { GameOverOverlay } from "./game-over-overlay" // Import the game over overlay
+import { VirtualGamepad } from "./ui/virtual-gamepad"
 
 // Helper types for extended controls state and dialog
 type Controls = { update: () => void }
@@ -321,10 +322,13 @@ export default function Game({
           playerRef={playerRef}
           onGameOver={() => setShowGameOver(true)}
         />
-      </Canvas>
+        </Canvas>
 
-      {/* Game Over Overlay */}
-      <GameOverOverlay isOpen={showGameOver} onRestart={handleRestart} score={score} />
+        {/* Game Over Overlay */}
+        <GameOverOverlay isOpen={showGameOver} onRestart={handleRestart} score={score} />
+
+        {/* Mobile Controls */}
+        <VirtualGamepad playerRef={playerRef} />
     </div>
   )
 }

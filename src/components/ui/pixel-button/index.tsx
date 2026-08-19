@@ -1,12 +1,13 @@
 "use client"
 
-import type { ButtonHTMLAttributes, ReactNode } from "react"
+import type { ButtonHTMLAttributes, ReactNode, Ref } from "react"
 import styles from "./index.module.css"
 import { cn } from "@/lib/utils"
 
 type PixelButtonVariant = "default" | "primary" | "success" | "error"
 
 interface PixelButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  ref?: Ref<HTMLButtonElement>
   children?: ReactNode
   variant?: PixelButtonVariant
   icon?: ReactNode
@@ -17,6 +18,7 @@ interface PixelButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function PixelButton({
   children,
+  ref,
   variant = "default",
   icon,
   iconPosition = "left",
@@ -39,7 +41,7 @@ export function PixelButton({
   )
 
   return (
-    <button className={buttonClasses} {...props}>
+    <button ref={ref} className={buttonClasses} {...props}>
       {icon &&
         (children ? (
           <>

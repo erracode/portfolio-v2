@@ -41,7 +41,7 @@ function GameApp() {
 			{/* Link to simple version */}
 			<Link
 				to="/links"
-				className="fixed top-4 right-4 z-50 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white text-sm hover:bg-white/20 transition-colors"
+				className="fixed top-4 left-4 z-50 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg text-white text-sm hover:bg-white/20 transition-colors"
 				aria-label="View simple link page (accessible version)"
 			>
 				📱 Simple View

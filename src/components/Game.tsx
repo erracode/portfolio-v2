@@ -21,6 +21,7 @@ import { EnhancedEnemySpawner } from "./enhanced-enemy-spawner" // Import the en
 import { FloatingHealthBar } from "./floating-health-bar" // Import the floating health bar
 import { GameOverOverlay } from "./game-over-overlay" // Import the game over overlay
 import { VirtualControls } from "./ui/virtual-controls"
+import { BuffsBar } from "./ui/buffs-bar"
 
 // Helper types for extended controls state and dialog
 type Controls = { update: () => void }
@@ -341,6 +342,9 @@ export default function Game({
 
       {/* Mobile touch controls */}
       <VirtualControls visible={!paused && !showGameOver} />
+
+      {/* Skill buff bar */}
+      <BuffsBar visible={!paused && !showGameOver} />
     </div>
   )
 }

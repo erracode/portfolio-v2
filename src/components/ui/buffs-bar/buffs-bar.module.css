@@ -1,0 +1,87 @@
+.bar {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 19000000;
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: calc(100vw - 2rem);
+}
+
+/* Dark WoW-style tile built on top of PixelButton.
+   Uses a CSS custom property (--buff-color) set inline per tile for the rarity color,
+   so the PixelButton pixel rails (::before/::after) pick it up. */
+.tile {
+  --buff-color: #9d9d9d;
+  background: #0d0f12 !important;
+  color: #fff !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Keep the pixel rails, but color them with the rarity color */
+.tile::before {
+  border-top-color: var(--buff-color) !important;
+  border-bottom-color: var(--buff-color) !important;
+}
+
+.tile::after {
+  border-left-color: var(--buff-color) !important;
+  border-right-color: var(--buff-color) !important;
+}
+
+.tileIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+.tileFallback {
+  font-family: "Press Start 2P", monospace;
+  font-size: 0.55rem;
+  color: #fff;
+}
+
+/* WoW-style tooltip */
+.tooltip {
+  background: #0d0f12 !important;
+  color: #e8dfd0 !important;
+  border: 1px solid #c79c6e !important;
+  border-radius: 0.25rem !important;
+  max-width: 240px;
+  padding: 0.75rem 0.875rem !important;
+  box-shadow:
+    0 0 0 2px #000,
+    3px 3px 0 rgba(0, 0, 0, 0.6) !important;
+}
+
+.tooltipTitle {
+  color: #c79c6e;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.3rem;
+}
+
+.tooltipSubtitle {
+  color: #a335ee;
+  font-size: 0.55rem;
+  margin-bottom: 0.4rem;
+}
+
+.tooltipDesc {
+  color: #d8cfc0;
+  font-size: 0.55rem;
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+}
+
+.tooltipEffect {
+  color: #1eff00;
+  font-size: 0.55rem;
+}

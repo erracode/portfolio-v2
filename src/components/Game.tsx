@@ -20,6 +20,7 @@ import { ExperienceHall } from "./halls/experience-hall"
 import { EnhancedEnemySpawner } from "./enhanced-enemy-spawner" // Import the enhanced enemy spawner
 import { FloatingHealthBar } from "./floating-health-bar" // Import the floating health bar
 import { GameOverOverlay } from "./game-over-overlay" // Import the game over overlay
+import { VirtualControls } from "./ui/virtual-controls"
 
 // Helper types for extended controls state and dialog
 type Controls = { update: () => void }
@@ -29,6 +30,7 @@ export interface SceneEntitiesProps {
   onDialog: (msg: string) => void
   playerRef: React.RefObject<any>
   onGameOver: () => void
+  paused: boolean
 }
 
 function SceneEntities({
@@ -37,6 +39,7 @@ function SceneEntities({
   onDialog,
   playerRef,
   onGameOver,
+  paused,
 }: SceneEntitiesProps) {
   const camera = useThree((state) => state.camera) as THREE.PerspectiveCamera
   const scene = useThree((state) => state.scene)
@@ -175,6 +178,11 @@ function SceneEntities({
     }
   }, [camera, controls, scene, onDialog, playerRef, onGameOver])
 
+  // Pause/resume the player controller when a modal is open
+  useEffect(() => {
+    playerRef.current?.setPaused(paused)
+  }, [paused, playerRef])
+
   useFrame((_, delta) => {
     if (gameOver) return // Skip updates if game is over
 
@@ -234,10 +242,12 @@ export default function Game({
   onProjectActivate,
   onExperienceActivate,
   onDialog,
+  paused,
 }: {
   onProjectActivate: (id: string) => void
   onExperienceActivate: (id: string) => void
   onDialog: (msg: string) => void
+  paused: boolean
 }) {
   const playerRef = useRef(null)
   const [showGameOver, setShowGameOver] = useState(false)
@@ -245,14 +255,14 @@ export default function Game({
 
   // Increment score over time
   useEffect(() => {
-    if (showGameOver) return
+    if (showGameOver || paused) return
 
     const scoreInterval = setInterval(() => {
       setScore((prev) => prev + 1)
     }, 1000)
 
     return () => clearInterval(scoreInterval)
-  }, [showGameOver])
+  }, [showGameOver, paused])
 
   // Handle game restart
   const handleRestart = () => {
@@ -278,6 +288,7 @@ export default function Game({
   return (
     <div className="relative w-full h-full">
       <Canvas
+        frameloop={paused ? "never" : "always"}
         onContextLost={(e) => {
           e.preventDefault()
           console.error("WebGL context lost")
@@ -301,6 +312,7 @@ export default function Game({
         {/* Controls */}
         <DreiOrbitControls
           makeDefault
+          enabled={!paused}
           enableDamping
           dampingFactor={0.05}
           maxPolarAngle={Math.PI / 2.1}
@@ -320,11 +332,15 @@ export default function Game({
           onDialog={onDialog}
           playerRef={playerRef}
           onGameOver={() => setShowGameOver(true)}
+          paused={paused}
         />
       </Canvas>
 
       {/* Game Over Overlay */}
       <GameOverOverlay isOpen={showGameOver} onRestart={handleRestart} score={score} />
+
+      {/* Mobile touch controls */}
+      <VirtualControls visible={!paused && !showGameOver} />
     </div>
   )
 }

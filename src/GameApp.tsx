@@ -21,6 +21,8 @@ function GameApp() {
 	]);
 	const [dialogIndex, setDialogIndex] = useState(0);
 
+	const isModalOpen = !!selectedProject || !!selectedExperience || contactOpen;
+
 	const handleDialogTrigger = useCallback((msg: string) => {
 		if (msg === "CONTACT_REQUEST") {
 			setContactOpen(true);
@@ -51,6 +53,7 @@ function GameApp() {
 					onProjectActivate={setSelectedProject}
 					onExperienceActivate={setSelectedExperience}
 					onDialog={handleDialogTrigger}
+					paused={isModalOpen}
 				/>
 			</main>
 

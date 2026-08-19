@@ -4,6 +4,7 @@ import { SpriteFlipbook } from "./SpriteFlipbook"
 import { IDLE_LEFT, IDLE_RIGHT, WALK_LEFT, WALK_RIGHT, type SpriteAnimation } from "./SpriteAnimation"
 import { JumpAnimation } from "./JumpAnimation"
 import { AxeAnimation } from "./AxeAnimation"
+import { touchInput } from "../lib/input"
 
 export class PlayerController {
   // Constants
@@ -42,10 +43,12 @@ export class PlayerController {
   private lastThrowTime = 0
   private raycaster = new THREE.Raycaster()
   private mouse = new THREE.Vector2()
+  private paused = false
+  private cameraRight = new THREE.Vector3()
+  private moveDir = new THREE.Vector3()
 
   // Movement vectors
   private walkDirection = new THREE.Vector3()
-  private rotateWalkDirection = new THREE.Quaternion()
   private rotateYAxis = new THREE.Vector3(0, 1, 0)
 
   constructor(camera: THREE.Camera, orbitControls: OrbitControls, scene: THREE.Scene) {
@@ -160,7 +163,13 @@ export class PlayerController {
     }, false)
   }
 
+  public setPaused(paused: boolean) {
+    this.paused = paused
+  }
+
   private handleAxeThrow(event: MouseEvent) {
+    if (this.paused) return
+
     const currentTime = performance.now() / 1000 // Convert to seconds
     
     // Check cooldown
@@ -191,8 +200,34 @@ export class PlayerController {
     }
   }
 
+  private throwAxeInDirection() {
+    const currentTime = performance.now() / 1000
+
+    if (currentTime - this.lastThrowTime < this.AXE_THROW_COOLDOWN) {
+      return
+    }
+
+    const playerPos = this.spriteFlipbook.getPosition()
+    const direction = new THREE.Vector3()
+
+    // Throw straight ahead in the camera's horizontal forward direction
+    this.camera.getWorldDirection(direction)
+    direction.y = 0
+    direction.normalize()
+
+    this.axeAnimation.throw(playerPos, direction)
+    this.lastThrowTime = currentTime
+  }
+
   public update(deltaTime: number) {
+    if (this.paused) return
+
     this.deltaTime = deltaTime
+
+    if (touchInput.throwQueued) {
+      touchInput.throwQueued = false
+      this.throwAxeInDirection()
+    }
     
     // Update state and animation before movement
     this.updateStateAndAnimation()
@@ -217,15 +252,24 @@ export class PlayerController {
   }
 
   private updateStateAndAnimation() {
+    const keyboardX = (this.keysPressed.d ? 1 : 0) - (this.keysPressed.a ? 1 : 0)
+    const touchActive = Math.abs(touchInput.moveX) > 0.01 || Math.abs(touchInput.moveZ) > 0.01
+    const moveX = touchActive ? touchInput.moveX : keyboardX
+
     // Update facing direction based on movement
-    if (this.keysPressed.a) {
+    if (moveX < -0.01) {
       this.isFacingLeft = true
-    } else if (this.keysPressed.d) {
+    } else if (moveX > 0.01) {
       this.isFacingLeft = false
     }
 
     // Update movement state
-    this.isMoving = this.keysPressed.w || this.keysPressed.a || this.keysPressed.s || this.keysPressed.d
+    this.isMoving =
+      touchActive ||
+      this.keysPressed.w ||
+      this.keysPressed.a ||
+      this.keysPressed.s ||
+      this.keysPressed.d
 
     // Only update walking animation if not jumping
     if (!this.isJumping) {
@@ -257,23 +301,38 @@ export class PlayerController {
       return
     }
 
-    // Get camera direction
-    this.camera.getWorldDirection(this.walkDirection)
-    this.walkDirection.y = 0 // Ignore y-axis movement
-    this.walkDirection.normalize() // Constant movement in all directions
+    // Compute effective movement input (keyboard or touch)
+    const keyboardX = (this.keysPressed.d ? 1 : 0) - (this.keysPressed.a ? 1 : 0)
+    const keyboardZ = (this.keysPressed.w ? 1 : 0) - (this.keysPressed.s ? 1 : 0)
+    const touchActive = Math.abs(touchInput.moveX) > 0.01 || Math.abs(touchInput.moveZ) > 0.01
+    const moveX = touchActive ? touchInput.moveX : keyboardX
+    const moveZ = touchActive ? touchInput.moveZ : keyboardZ
 
-    // Calculate direction offset based on pressed keys
-    const offset = this.directionOffset()
-    this.rotateWalkDirection.setFromAxisAngle(this.rotateYAxis, offset)
-    this.walkDirection.applyQuaternion(this.rotateWalkDirection)
+    // Camera-relative movement basis (forward and right)
+    this.camera.getWorldDirection(this.walkDirection)
+    this.walkDirection.y = 0
+    this.walkDirection.normalize()
+    this.cameraRight.crossVectors(this.walkDirection, this.rotateYAxis)
+
+    // Build world-space movement direction from the analog input
+    this.moveDir
+      .set(0, 0, 0)
+      .addScaledVector(this.walkDirection, moveZ)
+      .addScaledVector(this.cameraRight, moveX)
+
+    // Clamp diagonal speed to a constant maximum, keep analog magnitude below it
+    const magnitude = this.moveDir.length()
+    if (magnitude > 1) {
+      this.moveDir.divideScalar(magnitude)
+    }
 
     // Apply movement speed
-    this.walkDirection.multiplyScalar(this.MOVEMENT_SPEED_PER_SECOND * delta)
+    this.moveDir.multiplyScalar(this.MOVEMENT_SPEED_PER_SECOND * delta)
 
     // Move sprite
     const pos = this.spriteFlipbook.getPosition()
-    pos.x += this.walkDirection.x
-    pos.z += this.walkDirection.z
+    pos.x += this.moveDir.x
+    pos.z += this.moveDir.z
     this.spriteFlipbook.setPosition(pos.x, pos.y, pos.z)
 
     // Update camera position and target while maintaining relative position
@@ -290,32 +349,6 @@ export class PlayerController {
     this.camera.position.copy(playerPos).add(cameraOffset)
   }
 
-  private directionOffset() {
-    let directionOffset = 0 // w (forward)
-
-    if (this.keysPressed.w) {
-      if (this.keysPressed.a) {
-        directionOffset = Math.PI / 4 // w+a (forward+left)
-      } else if (this.keysPressed.d) {
-        directionOffset = -Math.PI / 4 // w+d (forward+right)
-      }
-    } else if (this.keysPressed.s) {
-      if (this.keysPressed.a) {
-        directionOffset = Math.PI / 4 + Math.PI / 2 // s+a (backward+left)
-      } else if (this.keysPressed.d) {
-        directionOffset = -Math.PI / 4 - Math.PI / 2 // s+d (backward+right)
-      } else {
-        directionOffset = Math.PI // s (backward)
-      }
-    } else if (this.keysPressed.a) {
-      directionOffset = Math.PI / 2 // a (left)
-    } else if (this.keysPressed.d) {
-      directionOffset = -Math.PI / 2 // d (right)
-    }
-
-    return directionOffset
-  }
-
   public getSprite(): THREE.Sprite {
     return this.spriteFlipbook.getSprite()
   }
@@ -324,7 +357,7 @@ export class PlayerController {
     const pos = this.spriteFlipbook.getPosition()
 
     // Handle jump initiation
-    if (this.keysPressed.space && !this.isJumping && this.canJump) {
+    if ((this.keysPressed.space || touchInput.jump) && !this.isJumping && this.canJump) {
       this.isJumping = true
       this.canJump = false
       this.velocity.y = this.JUMP_FORCE

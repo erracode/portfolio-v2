@@ -1,0 +1,75 @@
+.container {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 19000000;
+}
+
+.joystickBase {
+	position: absolute;
+	bottom: 3rem;
+	left: 2.5rem;
+	width: 9rem;
+	height: 9rem;
+	border-radius: 9999px;
+	background: rgba(255, 255, 255, 0.08);
+	border: 2px solid rgba(255, 255, 255, 0.35);
+	pointer-events: auto;
+	touch-action: none;
+}
+
+.joystickKnob {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 9999px;
+	background: rgba(255, 255, 255, 0.28);
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.buttons {
+	position: absolute;
+	bottom: 3rem;
+	right: 2.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	pointer-events: auto;
+}
+
+.button {
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 9999px;
+	border: 2px solid rgba(255, 255, 255, 0.5);
+	background: rgba(255, 255, 255, 0.12);
+	color: #fff;
+	font-family: "Press Start 2P", monospace;
+	font-size: 0.55rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	line-height: 1.2;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.button:active {
+	background: rgba(255, 255, 255, 0.32);
+	transform: translateY(2px);
+}
+
+.throwButton {
+	color: #ff9e6d;
+}
+
+.jumpButton {
+	color: #92cc41;
+}

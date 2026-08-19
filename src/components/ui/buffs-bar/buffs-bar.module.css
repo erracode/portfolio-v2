@@ -48,6 +48,10 @@
 
 /* WoW-style tooltip */
 .tooltip {
+  /* Color the 8bitcn decorative side rails gold so they blend with the frame
+     instead of rendering as white strips (bg-primary resolves via these vars). */
+  --color-primary: #c79c6e;
+  --primary: #c79c6e;
   background: #0d0f12 !important;
   color: #e8dfd0 !important;
   border: 1px solid #c79c6e !important;
@@ -57,6 +61,11 @@
   box-shadow:
     0 0 0 2px #000,
     3px 3px 0 rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Hide the Radix arrow (a white triangle) so it doesn't stick out of the WoW frame */
+.tooltip > span[style*="position: absolute"] {
+  display: none !important;
 }
 
 .tooltipTitle {
